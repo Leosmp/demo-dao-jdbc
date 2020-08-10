@@ -57,19 +57,9 @@ public class SellerDaoJDBC implements SellerDao {
 			rs = st.executeQuery(); //executa a query e armazena a linha com as informações do ID no ResultSet
 			
 			if(rs.next()) { //confere se o Id existe
-				Department dep = new Department(); //cria o objeto do tipo Department
-				Seller obj = new Seller(); //cria o objeto do tipo Seller
-				
-				dep.setId(rs.getInt("DepartmentId")); //
-				dep.setName(rs.getString("DepName"));
-				
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setSalalry(rs.getDouble("BaseSalary"));
-				obj.setDepartment(dep);
-				
+				Department dep = instantiateDdepartment(rs); //cria o objeto do tipo Department e adiciona os parametros
+				Seller obj = instantiateDdepartment(rs, dep); //cria o objeto do tipo Seller
+								
 				return obj;
 			}
 			return null;
@@ -79,6 +69,26 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+
+	private Seller instantiateDdepartment(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();
+		
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setSalalry(rs.getDouble("BaseSalary"));
+		obj.setDepartment(dep);
+		
+		return obj;
+	}
+
+	private Department instantiateDdepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId")); 
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 
 	@Override
