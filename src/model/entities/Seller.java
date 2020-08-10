@@ -13,7 +13,7 @@ public class Seller implements Serializable {
 	private Date birthDate;
 	private Double salalry;
 	
-	private Department department;
+	private Department department; //dependência -> modelo UML
 
 	public Seller() {
 	}
